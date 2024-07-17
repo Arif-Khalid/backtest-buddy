@@ -1,6 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException, Response
 from functools import lru_cache
-import uvicorn
 from typing import Optional
 import datetime
 from app.utils.trading import TradingClient
@@ -20,13 +19,11 @@ def get_settings() -> Settings:
     "/data/{symbol}/{period}/{start}/{end}",
     status_code=200,
 )
-
 def get_data(
     symbol: str,
     period: TimeFrameEnum,
     start: str,
     end: Optional[str],
-    response: Response,
     settings: Settings = Depends(get_settings),
 ):
     try:
@@ -36,14 +33,12 @@ def get_data(
         else:
             end = datetime.datetime.now()
     except ValueError:
-        response.status_code = 400
-        return {"error": "Invalid date format"}
+        raise HTTPException(status_code=400, detail="Invalid date format")
 
     try:
         timeframe = period.to_timeframe()
-    except ValueError:
-        response.status_code = 400
-        return {"error": "Invalid period"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail="Invalid period") from e
 
     try:
         trading_client = TradingClient(
