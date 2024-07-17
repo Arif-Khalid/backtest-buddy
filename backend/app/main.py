@@ -16,14 +16,14 @@ def get_settings() -> Settings:
 
 
 @app.get(
-    "/data/{symbol}/{period}/{start}/{end}",
+    "/data/{symbol}",
     status_code=200,
 )
 def get_data(
     symbol: str,
     period: TimeFrameEnum,
     start: str,
-    end: Optional[str],
+    end: Optional[str] = None,
     settings: Settings = Depends(get_settings),
 ):
     try:
@@ -31,7 +31,7 @@ def get_data(
         if end:
             end = datetime.datetime.strptime(end, "%Y-%m-%d")
         else:
-            end = datetime.datetime.now()
+            end = datetime.datetime.now() - datetime.timedelta(days=1)
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid date format")
 
