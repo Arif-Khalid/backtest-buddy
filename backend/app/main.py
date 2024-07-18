@@ -60,8 +60,8 @@ def get_data(
 
     try:
         trading_client = TradingClient(
-            settings.alpaca_key,
-            settings.alpaca_secret,
+            settings.ALPACA_KEY,
+            settings.ALPACA_SECRET,
         )
     except Exception as e:
         raise HTTPException(

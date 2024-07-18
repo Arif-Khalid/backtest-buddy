@@ -2,6 +2,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    alpaca_key: str = ""
-    alpaca_secret: str = ""
+    ALPACA_KEY: str = ""
+    ALPACA_SECRET: str = ""
     model_config = SettingsConfigDict(env_file="app/.env")
