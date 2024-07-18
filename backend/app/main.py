@@ -38,9 +38,9 @@ def get_data(
         HTTPException: 400: If the period is invalid
         HTTPException: 500: If unable to establish connection to Alpaca
         HTTPException: 500: If unable to retrieve data
-    
+
     Returns:
-        dict: The historical data with the keys open, high, low, close, volume. 
+        dict: The historical data with the keys open, high, low, close, volume.
         Values are dictionaries with the date as the key and the respective ohlcv value as the value.
     """
     try:
