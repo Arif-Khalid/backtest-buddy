@@ -4,7 +4,6 @@ from typing import Optional
 import datetime
 from app.utils.trading import TradingClient
 from app.models.trading_models import TimeFrameEnum
-from dotenv import load_dotenv
 from app.core.config import Settings
 
 app = FastAPI()
@@ -26,11 +25,30 @@ def get_data(
     end: Optional[str] = None,
     settings: Settings = Depends(get_settings),
 ):
+    """Retrieve historical data for a given symbol and period
+
+    Args:
+        symbol (str): The stock symbol
+        period (TimeFrameEnum): The period of the data
+        start (str): The start date of the data
+        end (str, optional): The end date of the data. Defaults to the dat before the current day.
+
+    Raises:
+        HTTPException: 400: If the date format is invalid
+        HTTPException: 400: If the period is invalid
+        HTTPException: 500: If unable to establish connection to Alpaca
+        HTTPException: 500: If unable to retrieve data
+    
+    Returns:
+        dict: The historical data with the keys open, high, low, close, volume. 
+        Values are dictionaries with the date as the key and the respective ohlcv value as the value.
+    """
     try:
         start = datetime.datetime.strptime(start, "%Y-%m-%d")
         if end:
             end = datetime.datetime.strptime(end, "%Y-%m-%d")
         else:
+            # Cannot use datetime.now() directly because Alpaca prevents reading today's data
             end = datetime.datetime.now() - datetime.timedelta(days=1)
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid date format")
