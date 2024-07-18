@@ -5,13 +5,13 @@ An application that helps you backtest your algorithmic trading strategy
 # Setup
 
 1. Clone the repo locally into a directory which will be referred to in further instructions as backtestbuddy/
+2. Create a .env file in backtestbuddy/backend/app/ with the keys ALPACA_KEY and ALPACA_SECRET. These can be obtained from creating an account with [Alpaca](https://alpaca.markets)
 
 ## With docker (preferred) ✅
 
 2. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) if not already on your system
 3. Launch Docker Desktop
 4. Launch a terminal and navigate inside backtestbuddy/
-
 ### With docker compose (preferred) ✅
 
 5. Run `docker-compose -f dev.docker-compose.yml watch`
