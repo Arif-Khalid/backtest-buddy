@@ -7,7 +7,9 @@ from alpaca.data.models.bars import BarSet
 import pandas as pd
 import numpy as np
 import datetime
-from app.core.config import Settings
+
+from app.models.trading_models import StrategyEnum, TimeFrameEnum
+from app.utils.trading_strategies import get_strategy_directions
 
 
 RELEVANT_KEYS = ["open", "high", "low", "close", "volume", "timestamp"]
@@ -35,16 +37,27 @@ class TradingClient:
     def get_candles(
         self,
         symbol: str,
-        timeframe: TimeFrame,
+        timeframe: TimeFrameEnum,
         start: datetime.datetime,
         end: datetime.datetime = None,
     ) -> pd.DataFrame:
 
         stockBarsRequest = StockBarsRequest(
             symbol_or_symbols=symbol,
-            timeframe=timeframe,
+            timeframe=timeframe.to_timeframe(),
             start=start,
             end=end,
         )
         stockBars = self.stock_historical_data_client.get_stock_bars(stockBarsRequest)
         return self.stock_bars_to_DF(stockBars, symbol)
+
+    def get_strategy_returns(
+        self,
+        symbol: str,
+        strategy: StrategyEnum,
+        timeframe: TimeFrameEnum,
+        start: datetime.datetime,
+        end: datetime.datetime = None,
+    ) -> pd.DataFrame:
+        candles = self.get_candles(symbol, timeframe, start, end)
+        return get_strategy_directions(candles, strategy)

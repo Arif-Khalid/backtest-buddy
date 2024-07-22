@@ -22,3 +22,20 @@ class TimeFrameEnum(Enum):
             return TimeFrame.Month
         else:
             raise ValueError("Invalid timeframe")
+
+
+class StrategyEnum(Enum):
+    OBV = "obv"
+    RSI = "rsi"
+    MACD = "macd"
+    SMA = "SMA"
+    BOLLINGERBANDS = "bb"
+    STOCHASTICOSCILLATOR = "stoch"
+    ADX = "adx"
+    CDLMORNINGSTAR = "morningstar"
+    CDL3WHITESOLDIERS = "3whitesoldiers"
+    CDL3BLACKCROWS = "3blackcrows"
+    CDLIDENTICAL3CROWS = "identical3crows"
+    CDLEVENINGSTAR = "eveningstar"
+    CDLCONCEALBABYSWALL = "concealbabyswall"
+    CDL3LINESTRIKE = "3linestrike"
