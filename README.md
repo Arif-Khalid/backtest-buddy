@@ -14,7 +14,7 @@ An application that helps you backtest your algorithmic trading strategy
 4. Launch a terminal and navigate inside backtestbuddy/
 ### With docker compose (preferred) ✅
 
-5. Run `docker-compose -f dev.docker-compose.yml watch`
+5. Run `docker-compose -f dev.docker-compose.yml up --watch`
 6. Backend is now running on **localhost:8000** and frontend is running on **localhost:5173**, ***WITH HMR***
 
 ### Without docker compose
