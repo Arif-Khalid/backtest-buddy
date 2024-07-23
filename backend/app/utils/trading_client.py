@@ -10,6 +10,7 @@ import datetime
 
 from app.models.trading_models import StrategyEnum, TimeFrameEnum
 from app.utils.trading_strategies import get_strategy_directions
+from app.utils.trading_strategies import get_returns
 
 
 RELEVANT_KEYS = ["open", "high", "low", "close", "volume", "timestamp"]
@@ -56,8 +57,14 @@ class TradingClient:
         symbol: str,
         strategy: StrategyEnum,
         timeframe: TimeFrameEnum,
+        amount: float,
         start: datetime.datetime,
         end: datetime.datetime = None,
     ) -> pd.DataFrame:
         candles = self.get_candles(symbol, timeframe, start, end)
-        return get_strategy_directions(candles, strategy)
+        directions = get_strategy_directions(candles, strategy)
+        candles["direction"] = directions
+        candles["direction"] = candles["direction"].shift(1).replace(np.nan, "Hold")
+        returns = get_returns(candles, amount)
+        candles["returns"] = returns
+        return candles

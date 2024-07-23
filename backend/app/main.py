@@ -19,6 +19,7 @@ def get_returns(
     symbol: str,
     strategy: StrategyEnum,
     period: TimeFrameEnum,
+    amount: float,
     start: str,
     end: Optional[str] = None,
     settings: Settings = Depends(get_settings),
@@ -62,7 +63,20 @@ def get_returns(
         ) from e
     try:
         symbol = symbol.upper()
-        return trading_client.get_strategy_returns(symbol, strategy, period, start, end)
+        df = trading_client.get_strategy_returns(symbol, strategy, period, amount, start, end)
+        return {
+            "data": {
+                "timestamps": list(df.index.strftime("%Y-%m-%d:%H:%M:%S")),
+                "open": df["open"].to_list(),
+                "high": df["high"].to_list(),
+                "low": df["low"].to_list(),
+                "close": df["close"].to_list(),
+                "volume": df["volume"].to_list(),
+                "direction": df["direction"].to_list(),
+                "returns": df["returns"].to_list(),
+                "total_returns": df["returns"].sum(),
+            }
+        }
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e

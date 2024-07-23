@@ -1,6 +1,7 @@
 import pandas as pd
 from app.models.trading_models import StrategyEnum
 from talib import abstract
+import numpy as np
 
 
 def get_strategy_directions(df: pd.DataFrame, strategy: StrategyEnum):
@@ -55,4 +56,28 @@ def get_strategy_directions(df: pd.DataFrame, strategy: StrategyEnum):
             pass
         case _:
             raise ValueError("Invalid strategy")
+
     return direction_res
+
+
+def get_returns(df: pd.DataFrame, amount: float):
+    positions = []
+    returns = []
+    prevDirection = None
+    for _, row in df.iterrows():
+        gain = 0
+        if row["direction"] == "Buy" and prevDirection != "Buy":
+            # Close sell positions
+            for position in positions:
+                gain += (1 - row["open"] / position) * amount
+            prevDirection = "Buy"
+            positions.append(row["open"])
+        elif row["direction"] == "Sell" and prevDirection != "Sell":
+            # Close buy positions
+            for position in positions:
+                gain += (row["open"] / position - 1) * amount
+            prevDirection = "Sell"
+            positions.append(row["open"])
+        returns.append(gain)
+
+    return np.cumsum(returns)
