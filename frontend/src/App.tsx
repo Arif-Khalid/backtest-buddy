@@ -19,6 +19,9 @@ import {
 } from "@chakra-ui/react";
 import Header from "./components/Header";
 
+// Main theme
+// #E69812
+// #A0CED9
 const theme = extendTheme({
   colors: {
     primary: {
