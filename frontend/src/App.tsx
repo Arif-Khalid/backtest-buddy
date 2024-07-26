@@ -15,9 +15,9 @@ import {
   Container,
   Divider,
   extendTheme,
-  Text,
 } from "@chakra-ui/react";
 import Header from "./components/Header";
+import FormInput from "./components/FormInput";
 
 // Main theme
 // #E69812
@@ -25,7 +25,7 @@ import Header from "./components/Header";
 const theme = extendTheme({
   colors: {
     primary: {
-      100: "#fdf5e7",
+      100: "#FCF7EE",
       200: "#f9e1b8",
       300: "#f6ce89",
       400: "#f2ba59",
@@ -118,10 +118,7 @@ function App() {
               <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
             </LineChart>
           </ResponsiveContainer>
-          <Text fontSize="xl" fontWeight="bold" mt={5}>
-            This is where the selection of symbol, strategy, and date range will
-            go
-          </Text>
+          <FormInput />
         </Container>
       </Box>
     </ChakraProvider>
