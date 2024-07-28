@@ -1,8 +1,16 @@
-import { Button, FormControl, FormLabel, Select } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Icon,
+  Select,
+  Text,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import "./FormInput.less";
+import { FaCalendar } from "react-icons/fa";
 
 export default function FormInput() {
   const [strategy, setStrategy] = useState<string>("");
@@ -13,11 +21,12 @@ export default function FormInput() {
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
   return (
     <form
+      className="form-input"
       onSubmit={(e) => {
         e.preventDefault();
       }}
     >
-      <div className="form-row">
+      <div className="form-input-row">
         <FormControl>
           <FormLabel>Symbol</FormLabel>
           <Select
@@ -43,31 +52,41 @@ export default function FormInput() {
           </Select>
         </FormControl>
       </div>
-      <div className="form-row">
+      <div className="form-input-row">
         <FormControl>
-          <FormLabel htmlFor="form-start-date">Start Date</FormLabel>
-          <DatePicker
-            id="form-start-date"
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-          />
+          <FormLabel
+            htmlFor="form-input-date-picker"
+            className="date-picker-label"
+          >
+            Date Range <Icon as={FaCalendar}></Icon>
+          </FormLabel>
+          <div className="date-picker-container">
+            <DatePicker
+              id="form-input-date-picker"
+              className="date-picker"
+              selected={startDate}
+              startDate={startDate || undefined}
+              endDate={endDate || undefined}
+              onChange={(dates) => {
+                const [start, end] = dates as (Date | null)[];
+                setStartDate(start);
+                setEndDate(end);
+              }}
+              selectsRange
+              withPortal
+            />
+          </div>
+          <Text color="black">{`${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`}</Text>
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="form-end-date">End Date</FormLabel>
-          <DatePicker
-            id="form-end-date"
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-          />
-        </FormControl>
-        <Button
-          type="submit"
-          aria-label="submit"
-          aria-describedby="submit the form"
-        >
-          Submit
-        </Button>
       </div>
+      <Button
+        type="submit"
+        aria-label="submit"
+        aria-describedby="submit the form"
+        colorScheme="teal"
+      >
+        Submit
+      </Button>
     </form>
   );
 }

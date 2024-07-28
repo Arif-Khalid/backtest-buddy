@@ -103,8 +103,8 @@ function App() {
   ];
   return (
     <ChakraProvider theme={theme}>
-      <Box bg="primary.100" height="100vh" padding={4}>
-        <Container maxW="80%" minW="md" display="flex" flexDirection="column">
+      <Box bg="primary.100" minHeight="100vh" padding={4}>
+        <Container maxW="80%" width="80%" display="flex" flexDirection="column">
           <Header />
           <Divider mb={5} />
           <ResponsiveContainer width="100%" height={500}>
