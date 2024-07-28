@@ -5,6 +5,7 @@ import {
   Icon,
   Select,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,6 +20,8 @@ export default function FormInput() {
     new Date("2021-01-01")
   );
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
+  const { colorMode, toggleColorMode } = useColorMode();
+  console.log(colorMode);
   return (
     <form
       className="form-input"
@@ -26,6 +29,7 @@ export default function FormInput() {
         e.preventDefault();
       }}
     >
+      <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button>
       <div className="form-input-row">
         <FormControl>
           <FormLabel>Symbol</FormLabel>
@@ -76,7 +80,7 @@ export default function FormInput() {
               withPortal
             />
           </div>
-          <Text color="black">{`${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`}</Text>
+          <Text color="default">{`${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`}</Text>
         </FormControl>
       </div>
       <Button

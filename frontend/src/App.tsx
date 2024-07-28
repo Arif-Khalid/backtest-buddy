@@ -15,6 +15,7 @@ import {
   Container,
   Divider,
   extendTheme,
+  ThemeConfig,
 } from "@chakra-ui/react";
 import Header from "./components/Header";
 import FormInput from "./components/FormInput";
@@ -22,10 +23,14 @@ import FormInput from "./components/FormInput";
 // Main theme
 // #E69812
 // #A0CED9
+const config: ThemeConfig = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
 const theme = extendTheme({
   colors: {
-    primary: {
-      100: "#FCF7EE",
+    customOrange: {
+      100: "#fcf7ee",
       200: "#f9e1b8",
       300: "#f6ce89",
       400: "#f2ba59",
@@ -35,7 +40,7 @@ const theme = extendTheme({
       800: "#613815",
       900: "#30200d",
     },
-    secondary: {
+    customBlue: {
       100: "#edf6f8",
       200: "#c8e3e9",
       300: "#a4d0db",
@@ -47,13 +52,26 @@ const theme = extendTheme({
       900: "#12211f",
     },
   },
-  components: {
-    Text: {
-      baseStyle: {
-        color: "secondary.600",
+  semanticTokens: {
+    colors: {
+      primary: {
+        default: "gray.100",
+        _dark: "gray.900",
+      },
+      secondary: {
+        default: "customBlue.600",
+        _dark: "customBlue.400",
       },
     },
   },
+  components: {
+    Text: {
+      baseStyle: {
+        color: "secondary",
+      },
+    },
+  },
+  config,
 });
 
 function App() {
@@ -103,7 +121,7 @@ function App() {
   ];
   return (
     <ChakraProvider theme={theme}>
-      <Box bg="primary.100" minHeight="100vh" padding={4}>
+      <Box bg="primary" minHeight="100vh" padding={4}>
         <Container maxW="80%" width="80%" display="flex" flexDirection="column">
           <Header />
           <Divider mb={5} />
