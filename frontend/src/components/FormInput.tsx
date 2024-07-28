@@ -62,7 +62,11 @@ export default function FormInput() {
             htmlFor="form-input-date-picker"
             className="date-picker-label"
           >
-            Date Range <Icon as={FaCalendar}></Icon>
+            Date Range{" "}
+            <Icon
+              color="secondary"
+              as={FaCalendar}
+            ></Icon>
           </FormLabel>
           <div className="date-picker-container">
             <DatePicker
@@ -80,7 +84,10 @@ export default function FormInput() {
               withPortal
             />
           </div>
-          <Text color="default">{`${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`}</Text>
+          <Text
+            color="default"
+            style={{ pointerEvents: "none" }}
+          >{`${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`}</Text>
         </FormControl>
       </div>
       <Button

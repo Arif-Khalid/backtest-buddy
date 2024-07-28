@@ -9,70 +9,10 @@ import {
   YAxis,
 } from "recharts";
 import "./App.less";
-import {
-  Box,
-  ChakraProvider,
-  Container,
-  Divider,
-  extendTheme,
-  ThemeConfig,
-} from "@chakra-ui/react";
+import { Box, ChakraProvider, Container, Divider } from "@chakra-ui/react";
 import Header from "./components/Header";
 import FormInput from "./components/FormInput";
-
-// Main theme
-// #E69812
-// #A0CED9
-const config: ThemeConfig = {
-  initialColorMode: "light",
-  useSystemColorMode: false,
-};
-const theme = extendTheme({
-  colors: {
-    customOrange: {
-      100: "#fcf7ee",
-      200: "#f9e1b8",
-      300: "#f6ce89",
-      400: "#f2ba59",
-      500: "#f0b429",
-      600: "#c18a22",
-      700: "#91611a",
-      800: "#613815",
-      900: "#30200d",
-    },
-    customBlue: {
-      100: "#edf6f8",
-      200: "#c8e3e9",
-      300: "#a4d0db",
-      400: "#7fbddc",
-      500: "#5ba9ce",
-      600: "#48879e",
-      700: "#36656f",
-      800: "#24433f",
-      900: "#12211f",
-    },
-  },
-  semanticTokens: {
-    colors: {
-      primary: {
-        default: "gray.100",
-        _dark: "gray.900",
-      },
-      secondary: {
-        default: "customBlue.600",
-        _dark: "customBlue.400",
-      },
-    },
-  },
-  components: {
-    Text: {
-      baseStyle: {
-        color: "secondary",
-      },
-    },
-  },
-  config,
-});
+import customTheme from "./theme/theme";
 
 function App() {
   const data = [
@@ -120,12 +60,12 @@ function App() {
     },
   ];
   return (
-    <ChakraProvider theme={theme}>
-      <Box bg="primary" minHeight="100vh" padding={4}>
+    <ChakraProvider theme={customTheme}>
+      <Box bg="background" minHeight="100vh" padding={4}>
         <Container maxW="80%" width="80%" display="flex" flexDirection="column">
           <Header />
           <Divider mb={5} />
-          <ResponsiveContainer width="100%" height={500}>
+          <ResponsiveContainer width="100%" height={400}>
             <LineChart width={500} height={500} data={data}>
               <CartesianGrid />
               <XAxis dataKey={"name"} stroke={"#48879e"} />
