@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi.middleware.cors import CORSMiddleware
 from functools import lru_cache
 from typing import Optional
 import datetime
@@ -6,7 +7,15 @@ from app.utils.trading_client import TradingClient
 from app.models.trading_models import StrategyEnum, TimeFrameEnum
 from app.core.config import Settings
 
+origins = ["http://localhost:5173"]
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @lru_cache
@@ -63,19 +72,18 @@ def get_returns(
         ) from e
     try:
         symbol = symbol.upper()
-        df = trading_client.get_strategy_returns(symbol, strategy, period, amount, start, end)
+        df = trading_client.get_strategy_returns(
+            symbol, strategy, period, amount, start, end
+        )
         return {
-            "data": {
-                "timestamps": list(df.index.strftime("%Y-%m-%d:%H:%M:%S")),
-                "open": df["open"].to_list(),
-                "high": df["high"].to_list(),
-                "low": df["low"].to_list(),
-                "close": df["close"].to_list(),
-                "volume": df["volume"].to_list(),
-                "direction": df["direction"].to_list(),
-                "returns": df["returns"].to_list(),
-                "total_returns": df["returns"].sum(),
-            }
+            "timestamps": list(df.index.strftime("%Y-%m-%d:%H:%M:%S")),
+            "open": df["open"].to_list(),
+            "high": df["high"].to_list(),
+            "low": df["low"].to_list(),
+            "close": df["close"].to_list(),
+            "volume": df["volume"].to_list(),
+            "directions": df["direction"].to_list(),
+            "returns": df["returns"].to_list(),
         }
 
     except ValueError as e:

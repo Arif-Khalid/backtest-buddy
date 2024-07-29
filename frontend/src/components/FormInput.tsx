@@ -12,23 +12,46 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import "./FormInput.less";
 import { FaCalendar } from "react-icons/fa";
+import { getStrategies } from "../utils/api/strategies";
+import { GraphDataPoint } from "../models/graph";
 
-export default function FormInput() {
+interface Props {
+  setGraphData: (data: GraphDataPoint[]) => void;
+}
+
+export default function FormInput({ setGraphData }: Props) {
   const [strategy, setStrategy] = useState<string>("");
   const [symbol, setSymbol] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>(
     new Date("2021-01-01")
   );
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
-  const { colorMode, toggleColorMode } = useColorMode();
-  console.log(colorMode);
+  const { toggleColorMode } = useColorMode();
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const data = await getStrategies(
+      symbol,
+      "obv",
+      "day",
+      1000,
+      startDate!,
+      endDate!
+    );
+
+    const newGraphData = [];
+    for (let i = 0; i < data["returns"].length; i++) {
+      newGraphData.push({
+        timestamp: new Date(data["timestamps"][i]),
+        value: data["returns"][i],
+        action: data["directions"][i],
+      });
+    }
+
+    setGraphData(newGraphData);
+  }
   return (
-    <form
-      className="form-input"
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-    >
+    <form className="form-input" onSubmit={handleSubmit}>
       <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button>
       <div className="form-input-row">
         <FormControl>
@@ -62,11 +85,7 @@ export default function FormInput() {
             htmlFor="form-input-date-picker"
             className="date-picker-label"
           >
-            Date Range{" "}
-            <Icon
-              color="secondary"
-              as={FaCalendar}
-            ></Icon>
+            Date Range <Icon color="secondary" as={FaCalendar}></Icon>
           </FormLabel>
           <div className="date-picker-container">
             <DatePicker
