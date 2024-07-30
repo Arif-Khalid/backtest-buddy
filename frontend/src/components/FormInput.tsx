@@ -3,9 +3,9 @@ import {
   FormControl,
   FormLabel,
   Icon,
+  Input,
   Select,
   Text,
-  useColorMode,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,6 +14,7 @@ import "./FormInput.less";
 import { FaCalendar } from "react-icons/fa";
 import { getStrategies } from "../utils/api/strategies";
 import { GraphDataPoint } from "../models/graph";
+import { StrategyEnum, TimeFrameEnum } from "../models/trading_models";
 
 interface Props {
   setGraphData: (data: GraphDataPoint[]) => void;
@@ -22,19 +23,21 @@ interface Props {
 export default function FormInput({ setGraphData }: Props) {
   const [strategy, setStrategy] = useState<string>("");
   const [symbol, setSymbol] = useState<string>("");
+  const [period, setPeriod] = useState<string>("");
+  const [amount, setAmount] = useState<number>(1000);
   const [startDate, setStartDate] = useState<Date | null>(
     new Date("2021-01-01")
   );
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
-  const { toggleColorMode } = useColorMode();
+  //const { toggleColorMode } = useColorMode();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const data = await getStrategies(
       symbol,
-      "obv",
-      "day",
-      1000,
+      strategy,
+      period,
+      amount,
       startDate!,
       endDate!
     );
@@ -52,7 +55,7 @@ export default function FormInput({ setGraphData }: Props) {
   }
   return (
     <form className="form-input" onSubmit={handleSubmit}>
-      <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button>
+      {/* <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button> */}
       <div className="form-input-row">
         <FormControl>
           <FormLabel>Symbol</FormLabel>
@@ -75,8 +78,38 @@ export default function FormInput({ setGraphData }: Props) {
               setStrategy(event.target.value);
             }}
           >
-            <option value="MACD">MACD</option>
+            {Object.values(StrategyEnum).map((strategy) => (
+              <option key={strategy} value={strategy}>
+                {strategy}
+              </option>
+            ))}
           </Select>
+        </FormControl>
+      </div>
+      <div className="form-input-row">
+        <FormControl>
+          <FormLabel>Period</FormLabel>
+          <Select
+            placeholder="Select period"
+            value={period}
+            onChange={(event) => {
+              setPeriod(event.target.value);
+            }}
+          >
+            {Object.values(TimeFrameEnum).map((period) => (
+              <option key={period} value={period}>
+                {period}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Trade Amount in USD</FormLabel>
+          <Input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(parseFloat(e.target.value))}
+          />
         </FormControl>
       </div>
       <div className="form-input-row">
