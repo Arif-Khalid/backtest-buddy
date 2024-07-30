@@ -21,9 +21,9 @@ interface Props {
 }
 
 export default function FormInput({ setGraphData }: Props) {
-  const [strategy, setStrategy] = useState<string>("");
-  const [symbol, setSymbol] = useState<string>("");
-  const [period, setPeriod] = useState<string>("");
+  const [strategy, setStrategy] = useState<string>(StrategyEnum.OBV);
+  const [symbol, setSymbol] = useState<string>("AAPL");
+  const [period, setPeriod] = useState<string>(TimeFrameEnum.DAY);
   const [amount, setAmount] = useState<number>(1000);
   const [startDate, setStartDate] = useState<Date | null>(
     new Date("2021-01-01")
@@ -46,8 +46,10 @@ export default function FormInput({ setGraphData }: Props) {
     for (let i = 0; i < data["returns"].length; i++) {
       newGraphData.push({
         timestamp: new Date(data["timestamps"][i]),
-        value: data["returns"][i],
-        action: data["directions"][i],
+        return: data["returns"][i],
+        open: data["open"][i],
+        close: data["close"][i],
+        signal: data["directions"][i],
       });
     }
 

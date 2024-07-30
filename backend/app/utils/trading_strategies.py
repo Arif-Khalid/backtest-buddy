@@ -83,4 +83,4 @@ def get_returns(df: pd.DataFrame, amount: float):
             positions.append(row["open"])
         returns.append(gain)
 
-    return np.cumsum(returns)
+    return np.cumsum(returns).round(2)

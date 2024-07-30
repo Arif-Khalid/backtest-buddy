@@ -1,19 +1,37 @@
 import {
   CartesianGrid,
+  Customized,
   Legend,
   Line,
   LineChart,
+  Rectangle,
   ResponsiveContainer,
+  Tooltip,
+  TooltipProps,
   XAxis,
   YAxis,
 } from "recharts";
 import "./App.less";
-import { Box, ChakraProvider, Container, Divider } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  ChakraProvider,
+  Container,
+  Divider,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
 import Header from "./components/Header";
 import FormInput from "./components/FormInput";
 import customTheme from "./theme/theme";
 import { useState } from "react";
-import { GraphDataPoint } from "./models/graph";
+import { RechartsCustomizedProps, GraphDataPoint } from "./models/graph";
+import {
+  NameType,
+  ValueType,
+} from "recharts/types/component/DefaultTooltipContent";
 
 // const data = [
 //   {
@@ -60,6 +78,55 @@ import { GraphDataPoint } from "./models/graph";
 //   },
 // ];
 
+const CustomToolTip = ({
+  active,
+  payload,
+}: TooltipProps<ValueType, NameType>) => {
+  if (!active || !payload || !payload.length) {
+    return null;
+  }
+  const { timestamp, open, close, signal } = payload[0]
+    .payload as GraphDataPoint;
+
+  return (
+    <Card>
+      <CardHeader display={"flex"} justifyContent={"space-between"}>
+        <Text fontSize={"large"}>Date: {timestamp.toLocaleDateString()}</Text>
+        <Tag size="md" variant={signal}>
+          {"Signal: " + signal}
+        </Tag>
+      </CardHeader>
+      <CardBody>
+        <Text>
+          Return: {open} Close: {close} Signal: {signal}
+        </Text>
+      </CardBody>
+    </Card>
+  );
+};
+
+// Necessary to receive unknown type props since type handling for custom components in Recharts is not well documented.
+const CustomizedCandle = (props: unknown) => {
+  const [openSeries, closedSeries] = (props as RechartsCustomizedProps)
+    .formattedGraphicalItems!;
+
+  return openSeries.props.points.map((openSeriesPoint, index) => {
+    const closedSeriesPoint = closedSeries.props.points[index];
+    const yDifference = openSeriesPoint.y - closedSeriesPoint.y;
+
+    return (
+      <Rectangle
+        key={openSeriesPoint.payload.timestamp.toLocaleString()}
+        width={10}
+        height={yDifference}
+        x={openSeriesPoint.x - 5}
+        y={closedSeriesPoint.y}
+        fill={yDifference > 0 ? "green" : "red"}
+      />
+    );
+  });
+};
+
 function App() {
   const [graphData, setGraphData] = useState<GraphDataPoint[]>([]);
   return (
@@ -79,10 +146,11 @@ function App() {
                 }}
               />
               <YAxis stroke={"#48879e"} />
-              {/* <Tooltip /> */}
+              <Tooltip content={<CustomToolTip />} />
               <Legend />
-              <Line type="monotone" dataKey="value" stroke="#8884d8" />
-              <Line type="monotone" dataKey="action" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="open" stroke="#8884d8" />
+              <Line type="monotone" dataKey="close" stroke="#82ca9d" />
+              <Customized component={CustomizedCandle} />
             </LineChart>
           </ResponsiveContainer>
           <FormInput setGraphData={setGraphData} />

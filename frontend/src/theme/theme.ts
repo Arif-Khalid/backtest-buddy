@@ -2,6 +2,7 @@
 // #E69812
 
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { DirectionEnum } from "../models/trading_models";
 
 // #A0CED9
 const config: ThemeConfig = {
@@ -40,6 +41,10 @@ const customTheme = extendTheme({
         default: "white",
         _dark: "gray.900",
       },
+      backgroundContrast: {
+        default: "gray.900",
+        _dark: "gray.300",
+      },
       primary: {
         default: "teal.600",
         _dark: "teal.300",
@@ -48,12 +53,43 @@ const customTheme = extendTheme({
         default: "blue.600",
         _dark: "blue.300",
       },
+      [DirectionEnum.BUY]: {
+        default: "green.500",
+        _dark: "green.500",
+      },
+      [DirectionEnum.SELL]: {
+        default: "red.500",
+        _dark: "red.500",
+      },
+      [DirectionEnum.HOLD]: {
+        default: "orange.500",
+        _dark: "orange.500",
+      },
     },
   },
   components: {
     Text: {
       baseStyle: {
         color: "primary",
+      },
+    },
+    Tag: {
+      variants: {
+        [DirectionEnum.BUY]: {
+          container: {
+            backgroundColor: DirectionEnum.BUY,
+          },
+        },
+        [DirectionEnum.SELL]: {
+          container: {
+            backgroundColor: DirectionEnum.SELL,
+          },
+        },
+        [DirectionEnum.HOLD]: {
+          container: {
+            backgroundColor: DirectionEnum.HOLD,
+          },
+        },
       },
     },
   },
