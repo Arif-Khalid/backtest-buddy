@@ -3,11 +3,11 @@ from alpaca.data.timeframe import TimeFrame
 
 
 class TimeFrameEnum(Enum):
-    DAY = "day"
-    MINUTE = "minute"
-    HOUR = "hour"
-    WEEK = "week"
-    MONTH = "month"
+    DAY = "DAY"
+    MINUTE = "MINUTE"
+    HOUR = "HOUR"
+    WEEK = "WEEK"
+    MONTH = "MONTH"
 
     def to_timeframe(self) -> TimeFrame:
         if self == TimeFrameEnum.DAY:
@@ -25,17 +25,23 @@ class TimeFrameEnum(Enum):
 
 
 class StrategyEnum(Enum):
-    OBV = "obv"
-    RSI = "rsi"
-    MACD = "macd"
+    OBV = "OBV"
+    RSI = "RSI"
+    MACD = "MACD"
     SMA = "SMA"
-    BOLLINGERBANDS = "bb"
-    STOCHASTICOSCILLATOR = "stoch"
-    ADX = "adx"
-    CDLMORNINGSTAR = "morningstar"
-    CDL3WHITESOLDIERS = "3whitesoldiers"
-    CDL3BLACKCROWS = "3blackcrows"
-    CDLIDENTICAL3CROWS = "identical3crows"
-    CDLEVENINGSTAR = "eveningstar"
-    CDLCONCEALBABYSWALL = "concealbabyswall"
-    CDL3LINESTRIKE = "3linestrike"
+    BOLLINGERBANDS = "BBANDS"
+    STOCHASTICOSCILLATOR = "STOCH"
+    ADX = "ADX"
+    CDLMORNINGSTAR = "MORNINGSTAR"
+    CDL3WHITESOLDIERS = "3WHITESOLDIERS"
+    CDL3BLACKCROWS = "3BLACKCROWS"
+    CDLIDENTICAL3CROWS = "IDENTICAL3CROWS"
+    CDLEVENINGSTAR = "EVENINGSTAR"
+    CDLCONCEALBABYSWALL = "CONCEALBABYSWALL"
+    CDL3LINESTRIKE = "3LINESTRIKE"
+
+
+class DirectionEnum(Enum):
+    BUY = "BUY"
+    SELL = "SELL"
+    HOLD = "HOLD"

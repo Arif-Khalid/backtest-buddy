@@ -1,5 +1,5 @@
 import pandas as pd
-from app.models.trading_models import StrategyEnum
+from app.models.trading_models import DirectionEnum, StrategyEnum
 from talib import abstract
 import numpy as np
 
@@ -12,9 +12,9 @@ def get_strategy_directions(df: pd.DataFrame, strategy: StrategyEnum):
             strategy_res = abstract.OBV(df)
             for value in strategy_res:
                 if value > 0:
-                    direction_res.append("Buy")
+                    direction_res.append(DirectionEnum.BUY)
                 else:
-                    direction_res.append("Sell")
+                    direction_res.append(DirectionEnum.SELL)
         case StrategyEnum.RSI:
             strategy_res = abstract.RSI(df)
             pass
@@ -66,17 +66,20 @@ def get_returns(df: pd.DataFrame, amount: float):
     prevDirection = None
     for _, row in df.iterrows():
         gain = 0
-        if row["direction"] == "Buy" and prevDirection != "Buy":
+        if row["direction"] == DirectionEnum.BUY and prevDirection != DirectionEnum.BUY:
             # Close sell positions
             for position in positions:
                 gain += (1 - row["open"] / position) * amount
-            prevDirection = "Buy"
+            prevDirection = DirectionEnum.BUY
             positions.append(row["open"])
-        elif row["direction"] == "Sell" and prevDirection != "Sell":
+        elif (
+            row["direction"] == DirectionEnum.SELL
+            and prevDirection != DirectionEnum.SELL
+        ):
             # Close buy positions
             for position in positions:
                 gain += (row["open"] / position - 1) * amount
-            prevDirection = "Sell"
+            prevDirection = DirectionEnum.SELL
             positions.append(row["open"])
         returns.append(gain)
 

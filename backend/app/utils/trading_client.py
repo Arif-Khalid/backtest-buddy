@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import datetime
 
-from app.models.trading_models import StrategyEnum, TimeFrameEnum
+from app.models.trading_models import DirectionEnum, StrategyEnum, TimeFrameEnum
 from app.utils.trading_strategies import get_strategy_directions
 from app.utils.trading_strategies import get_returns
 
@@ -64,7 +64,10 @@ class TradingClient:
         candles = self.get_candles(symbol, timeframe, start, end)
         directions = get_strategy_directions(candles, strategy)
         candles["direction"] = directions
-        candles["direction"] = candles["direction"].shift(1).replace(np.nan, "Hold")
+        # Shift the directions by one to avoid look-ahead bias, i.e. the model performs the trade one period after the signal
+        candles["direction"] = (
+            candles["direction"].shift(1).replace(np.nan, DirectionEnum.HOLD)
+        )
         returns = get_returns(candles, amount)
         candles["returns"] = returns
         return candles
