@@ -60,27 +60,39 @@ def get_strategy_directions(df: pd.DataFrame, strategy: StrategyEnum):
     return direction_res
 
 
-def get_returns(df: pd.DataFrame, amount: float):
+def get_bot_results(df: pd.DataFrame, amount: float):
     positions = []
-    returns = []
+    gains = []
+    bot_actions = []
     prevDirection = None
     for _, row in df.iterrows():
         gain = 0
+        bot_action = "HOLD"
         if row["direction"] == DirectionEnum.BUY and prevDirection != DirectionEnum.BUY:
+            if len(positions) > 0:
+                bot_action = "CLOSE SELLS AND BUY"
+            else:
+                bot_action = "BUY"
             # Close sell positions
             for position in positions:
                 gain += (1 - row["open"] / position) * amount
             prevDirection = DirectionEnum.BUY
-            positions.append(row["open"])
+            positions = [row["open"]]
         elif (
             row["direction"] == DirectionEnum.SELL
             and prevDirection != DirectionEnum.SELL
         ):
+            if len(positions) > 0:
+                bot_action = "CLOSE BUYS AND SELL"
+            else:
+                bot_action = "SELL"
             # Close buy positions
             for position in positions:
                 gain += (row["open"] / position - 1) * amount
             prevDirection = DirectionEnum.SELL
-            positions.append(row["open"])
-        returns.append(gain)
+            positions = [row["open"]]
 
-    return np.cumsum(returns).round(2)
+        gains.append(round(gain, 2))
+        bot_actions.append(bot_action)
+
+    return [gains, bot_actions]

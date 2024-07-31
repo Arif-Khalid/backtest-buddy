@@ -18,7 +18,6 @@ export async function getStrategies(
 ) {
   try {
     symbol = symbol.toUpperCase();
-    console.log(symbol);
     const startDateString = getDateString(start);
     const endDateString = getDateString(end);
     const response = await axiosInstance.get(`${symbol}/${strategy}`, {

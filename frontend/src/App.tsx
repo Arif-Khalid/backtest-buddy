@@ -20,6 +20,12 @@ import {
   ChakraProvider,
   Container,
   Divider,
+  Stat,
+  StatArrow,
+  StatGroup,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
   Tag,
   Text,
 } from "@chakra-ui/react";
@@ -32,6 +38,7 @@ import {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
+import { roundToDecimalPlaces } from "./utils/common/helper";
 
 // const data = [
 //   {
@@ -85,21 +92,56 @@ const CustomToolTip = ({
   if (!active || !payload || !payload.length) {
     return null;
   }
-  const { timestamp, open, close, signal } = payload[0]
-    .payload as GraphDataPoint;
+  const {
+    timestamp,
+    open,
+    close,
+    signal,
+    gain,
+    return_to_date,
+    bot_action,
+    symbol,
+  } = payload[0].payload as GraphDataPoint;
 
   return (
     <Card>
-      <CardHeader display={"flex"} justifyContent={"space-between"}>
-        <Text fontSize={"large"}>Date: {timestamp.toLocaleDateString()}</Text>
-        <Tag size="md" variant={signal}>
-          {"Signal: " + signal}
-        </Tag>
+      <CardHeader
+        display={"flex"}
+        columnGap={"1rem"}
+        justifyContent={"space-between"}
+      >
+        <StatGroup>
+          <Stat>
+            <StatLabel>{symbol}</StatLabel>
+            <StatNumber>{roundToDecimalPlaces(close, 2)} USD</StatNumber>
+            <StatHelpText>
+              <StatArrow type={close - open >= 0 ? "increase" : "decrease"} />
+              {roundToDecimalPlaces((close - open) / open, 2)}%
+            </StatHelpText>
+          </Stat>
+        </StatGroup>
+        <StatGroup>
+          <Stat>
+            <StatLabel>{"Returns To Date"}</StatLabel>
+            <StatNumber>{return_to_date} USD</StatNumber>
+            <StatHelpText>
+              <StatArrow type={gain >= 0 ? "increase" : "decrease"} />
+              {gain} USD
+            </StatHelpText>
+          </Stat>
+        </StatGroup>
       </CardHeader>
-      <CardBody>
+      <CardBody display="flex" flexDirection="column" rowGap={"0.5rem"}>
         <Text>
-          Return: {open} Close: {close} Signal: {signal}
+          Date: {timestamp.toLocaleDateString()}{" "}
+          {timestamp.toLocaleTimeString()}
         </Text>
+        <Tag size="md" variant={signal} width={"fit-content"}>
+          Signal: {signal}
+        </Tag>
+        <Tag size="md" variant={bot_action} width={"fit-content"}>
+          Bot Action: {bot_action}
+        </Tag>
       </CardBody>
     </Card>
   );
@@ -109,7 +151,6 @@ const CustomToolTip = ({
 const CustomizedCandle = (props: unknown) => {
   const [openSeries, closedSeries] = (props as RechartsCustomizedProps)
     .formattedGraphicalItems!;
-
   return openSeries.props.points.map((openSeriesPoint, index) => {
     const closedSeriesPoint = closedSeries.props.points[index];
     const yDifference = openSeriesPoint.y - closedSeriesPoint.y;
@@ -117,9 +158,9 @@ const CustomizedCandle = (props: unknown) => {
     return (
       <Rectangle
         key={openSeriesPoint.payload.timestamp.toLocaleString()}
-        width={10}
+        width={5}
         height={yDifference}
-        x={openSeriesPoint.x - 5}
+        x={openSeriesPoint.x - 2.5}
         y={closedSeriesPoint.y}
         fill={yDifference > 0 ? "green" : "red"}
       />
@@ -148,9 +189,15 @@ function App() {
               <YAxis stroke={"#48879e"} />
               <Tooltip content={<CustomToolTip />} />
               <Legend />
-              <Line type="monotone" dataKey="open" stroke="#8884d8" />
-              <Line type="monotone" dataKey="close" stroke="#82ca9d" />
-              <Customized component={CustomizedCandle} />
+              <Line type="linear" dataKey="open" stroke="" dot={false} />
+              <Line type="linear" dataKey="close" stroke="" dot={false} />
+              <Line
+                type="linear"
+                dataKey="return_to_date"
+                stroke="purple"
+                dot={false}
+              />
+              <Customized component={CustomizedCandle} name="lebron" />
             </LineChart>
           </ResponsiveContainer>
           <FormInput setGraphData={setGraphData} />

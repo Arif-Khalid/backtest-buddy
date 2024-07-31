@@ -83,7 +83,8 @@ def get_returns(
             "close": df["close"].to_list(),
             "volume": df["volume"].to_list(),
             "directions": df["direction"].to_list(),
-            "returns": df["returns"].to_list(),
+            "gains": df["gains"].to_list(),
+            "bot_actions": df["bot_actions"].to_list(),
         }
 
     except ValueError as e:

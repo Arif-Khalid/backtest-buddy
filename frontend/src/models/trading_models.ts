@@ -27,4 +27,6 @@ export enum DirectionEnum {
   BUY = "BUY",
   SELL = "SELL",
   HOLD = "HOLD",
+  CLOSE_BUYS_AND_SELL = "CLOSE BUYS AND SELL",
+  CLOSE_SELLS_AND_BUY = "CLOSE SELLS AND BUY",
 }

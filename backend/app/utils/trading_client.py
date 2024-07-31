@@ -10,7 +10,7 @@ import datetime
 
 from app.models.trading_models import DirectionEnum, StrategyEnum, TimeFrameEnum
 from app.utils.trading_strategies import get_strategy_directions
-from app.utils.trading_strategies import get_returns
+from app.utils.trading_strategies import get_bot_results
 
 
 RELEVANT_KEYS = ["open", "high", "low", "close", "volume", "timestamp"]
@@ -68,6 +68,7 @@ class TradingClient:
         candles["direction"] = (
             candles["direction"].shift(1).replace(np.nan, DirectionEnum.HOLD)
         )
-        returns = get_returns(candles, amount)
-        candles["returns"] = returns
+        gains, bot_actions = get_bot_results(candles, amount)
+        candles["gains"] = gains
+        candles["bot_actions"] = bot_actions
         return candles

@@ -6,6 +6,7 @@ import {
   Input,
   Select,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,6 +16,7 @@ import { FaCalendar } from "react-icons/fa";
 import { getStrategies } from "../utils/api/strategies";
 import { GraphDataPoint } from "../models/graph";
 import { StrategyEnum, TimeFrameEnum } from "../models/trading_models";
+import { roundToDecimalPlaces } from "../utils/common/helper";
 
 interface Props {
   setGraphData: (data: GraphDataPoint[]) => void;
@@ -29,7 +31,7 @@ export default function FormInput({ setGraphData }: Props) {
     new Date("2021-01-01")
   );
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
-  //const { toggleColorMode } = useColorMode();
+  const { toggleColorMode } = useColorMode();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,13 +45,23 @@ export default function FormInput({ setGraphData }: Props) {
     );
 
     const newGraphData = [];
-    for (let i = 0; i < data["returns"].length; i++) {
+    let return_to_date = 0;
+    for (let i = 0; i < data["gains"].length; i++) {
+      return_to_date = roundToDecimalPlaces(
+        return_to_date + data["gains"][i],
+        2
+      );
+
+      // Can push symbol directly here even though setState might be called before query completes because react does not mutate state, meaning that the symbol will be the same as when the query was made and the new symbol object created by setState will not be used
       newGraphData.push({
         timestamp: new Date(data["timestamps"][i]),
-        return: data["returns"][i],
         open: data["open"][i],
         close: data["close"][i],
         signal: data["directions"][i],
+        gain: data["gains"][i],
+        return_to_date,
+        bot_action: data["bot_actions"][i],
+        symbol,
       });
     }
 
@@ -57,7 +69,7 @@ export default function FormInput({ setGraphData }: Props) {
   }
   return (
     <form className="form-input" onSubmit={handleSubmit}>
-      {/* <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button> */}
+      <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button>
       <div className="form-input-row">
         <FormControl>
           <FormLabel>Symbol</FormLabel>
@@ -69,6 +81,7 @@ export default function FormInput({ setGraphData }: Props) {
             }}
           >
             <option value="AAPL">AAPL</option>
+            <option value="TSLA">TSLA</option>
           </Select>
         </FormControl>
         <FormControl>

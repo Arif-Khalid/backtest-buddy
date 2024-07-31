@@ -1,9 +1,12 @@
 export type GraphDataPoint = {
   timestamp: Date;
-  return: number;
   open: number;
   close: number;
   signal: string;
+  gain: number;
+  bot_action: string;
+  return_to_date: number;
+  symbol: string;
 };
 
 export type RechartsCustomizedProps = {

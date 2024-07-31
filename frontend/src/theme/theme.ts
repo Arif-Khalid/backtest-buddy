@@ -62,8 +62,8 @@ const customTheme = extendTheme({
         _dark: "red.500",
       },
       [DirectionEnum.HOLD]: {
-        default: "orange.500",
-        _dark: "orange.500",
+        default: "orange.400",
+        _dark: "orange.400",
       },
     },
   },
@@ -78,16 +78,31 @@ const customTheme = extendTheme({
         [DirectionEnum.BUY]: {
           container: {
             backgroundColor: DirectionEnum.BUY,
+            color: "white",
           },
         },
         [DirectionEnum.SELL]: {
           container: {
             backgroundColor: DirectionEnum.SELL,
+            color: "white",
           },
         },
         [DirectionEnum.HOLD]: {
           container: {
             backgroundColor: DirectionEnum.HOLD,
+            color: "white",
+          },
+        },
+        [DirectionEnum.CLOSE_BUYS_AND_SELL]: {
+          container: {
+            backgroundColor: DirectionEnum.SELL,
+            color: "white",
+          },
+        },
+        [DirectionEnum.CLOSE_SELLS_AND_BUY]: {
+          container: {
+            backgroundColor: DirectionEnum.BUY,
+            color: "white",
           },
         },
       },
