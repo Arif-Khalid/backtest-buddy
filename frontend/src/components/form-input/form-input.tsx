@@ -13,10 +13,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import "./form-input.less";
 import { FaCalendar } from "react-icons/fa";
-import { getStrategies } from "../../utils/api/strategies";
 import { GraphDataPoint } from "../../models/graph";
-import { StrategyEnum, TimeFrameEnum } from "../../models/trading-models";
-import { roundToDecimalPlaces } from "../../utils/common/helper";
+import {
+  StrategyEnum,
+  TimeFrameEnum,
+} from "../../models/trading-models";
+import { getGraphData } from "../../utils/common/graph-utils";
 
 interface Props {
   setGraphData: (data: GraphDataPoint[]) => void;
@@ -37,7 +39,8 @@ export default function FormInput({ setGraphData }: Props) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
-    const data = await getStrategies(
+
+    const newGraphData = await getGraphData(
       symbol,
       strategy,
       period,
@@ -45,28 +48,6 @@ export default function FormInput({ setGraphData }: Props) {
       startDate!,
       endDate!
     );
-
-    const newGraphData = [];
-    let return_to_date = 0;
-    for (let i = 0; i < data["gains"].length; i++) {
-      return_to_date = roundToDecimalPlaces(
-        return_to_date + data["gains"][i],
-        2
-      );
-
-      // Can push symbol directly here even though setState might be called before query completes because react does not mutate state, meaning that the symbol will be the same as when the query was made and the new symbol object created by setState will not be used
-      newGraphData.push({
-        timestamp: new Date(data["timestamps"][i]),
-        open: data["open"][i],
-        close: data["close"][i],
-        signal: data["directions"][i],
-        gain: data["gains"][i],
-        return_to_date,
-        bot_action: data["bot_actions"][i],
-        symbol,
-        strategy,
-      });
-    }
 
     setGraphData(newGraphData);
     setIsLoading(false);

@@ -53,6 +53,10 @@ const customTheme = extendTheme({
         default: "blue.600",
         _dark: "blue.300",
       },
+      tertiary: {
+        default: "orange.300",
+        _dark: "orange.600",
+      },
       [DirectionEnum.BUY]: {
         default: "green.500",
         _dark: "green.500",

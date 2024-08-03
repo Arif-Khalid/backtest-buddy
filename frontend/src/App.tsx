@@ -16,18 +16,41 @@ import {
   Container,
   Divider,
   Heading,
+  Icon,
 } from "@chakra-ui/react";
 import Header from "./components/header/header";
 import FormInput from "./components/form-input/form-input";
 import customTheme from "./theme/theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GraphDataPoint } from "./models/graph";
 import CustomToolTip from "./components/custom-tool-tip/custom-tool-tip";
 import CustomizedCandle from "./components/cutomized-candle/customized-candle";
+import { FaQuestionCircle } from "react-icons/fa";
+import { Tooltip as ChakraTooltip } from "@chakra-ui/react";
+import GraphTitleToolTip from "./components/graph-title-tool-tip/graph-title-tool-tip";
+import { getGraphData } from "./utils/common/graph-utils";
+import { StrategyEnum, TimeFrameEnum } from "./models/trading-models";
 
 function App() {
   const [graphData, setGraphData] = useState<GraphDataPoint[]>([]);
   const isGraphPopulated = graphData.length > 0;
+
+  useEffect(() => {
+    async function getInitialGraphData() {
+      const initialGraphData = await getGraphData(
+        "AAPL",
+        StrategyEnum.OBV,
+        TimeFrameEnum.DAY,
+        1000,
+        new Date("2021-01-01"),
+        new Date("2021-01-10")
+      );
+      setGraphData(initialGraphData);
+    }
+
+    getInitialGraphData();
+  }, []);
+
   return (
     <ChakraProvider theme={customTheme}>
       <Box bg="background" minHeight="100vh" padding={4}>
@@ -35,11 +58,34 @@ function App() {
           <Header />
           <Divider mb={5} />
           {isGraphPopulated && (
-            <Heading as="h3" fontSize="md" marginBottom={2}>
-              {graphData[0].strategy} strategy on {graphData[0].symbol} from{" "}
-              {graphData[0].timestamp.toLocaleDateString()} to{" "}
-              {graphData[graphData.length - 1].timestamp.toLocaleDateString()}
-            </Heading>
+            <Box
+              display="flex"
+              flexDirection="row"
+              justifyContent="start"
+              alignItems="start"
+            >
+              <Heading as="h3" fontSize="md" marginBottom={2}>
+                {graphData[0].strategy} strategy on {graphData[0].symbol} from{" "}
+                {graphData[0].timestamp.toLocaleDateString()} to{" "}
+                {graphData[graphData.length - 1].timestamp.toLocaleDateString()}
+              </Heading>
+              <ChakraTooltip
+                label={
+                  <GraphTitleToolTip
+                    strategy={graphData[0].strategy}
+                    symbol={graphData[0].symbol}
+                  />
+                }
+              >
+                <Box marginTop={-2}>
+                  <Icon
+                    as={FaQuestionCircle}
+                    boxSize={3}
+                    color="secondary"
+                  ></Icon>
+                </Box>
+              </ChakraTooltip>
+            </Box>
           )}
           <ResponsiveContainer width="100%" height={400}>
             <LineChart width={500} height={500} data={graphData}>

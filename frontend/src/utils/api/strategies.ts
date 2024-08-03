@@ -7,29 +7,30 @@ const axiosInstance = axios.create({
 function getDateString(date: Date) {
   return date.toISOString().slice(0, 10);
 }
-
-export async function getStrategies(
-  symbol: string,
-  strategy: string,
-  period: string,
-  amount: number,
-  start: Date,
-  end: Date
-) {
-  try {
-    symbol = symbol.toUpperCase();
-    const startDateString = getDateString(start);
-    const endDateString = getDateString(end);
-    const response = await axiosInstance.get(`${symbol}/${strategy}`, {
-      params: {
-        period: period,
-        amount: amount,
-        start: startDateString,
-        end: endDateString,
-      },
-    });
-    return response.data;
-  } catch (e) {
-    console.error(e);
-  }
-}
+export const strategiesApi = {
+  async getStrategies(
+    symbol: string,
+    strategy: string,
+    period: string,
+    amount: number,
+    start: Date,
+    end: Date
+  ) {
+    try {
+      symbol = symbol.toUpperCase();
+      const startDateString = getDateString(start);
+      const endDateString = getDateString(end);
+      const response = await axiosInstance.get(`${symbol}/${strategy}`, {
+        params: {
+          period: period,
+          amount: amount,
+          start: startDateString,
+          end: endDateString,
+        },
+      });
+      return response.data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+};

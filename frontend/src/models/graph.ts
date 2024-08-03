@@ -1,13 +1,16 @@
+import { DirectionEnum, StrategyEnum, TimeFrameEnum } from "./trading-models";
+
 export type GraphDataPoint = {
   timestamp: Date;
   open: number;
   close: number;
-  signal: string;
+  signal: DirectionEnum;
   gain: number;
-  bot_action: string;
+  bot_action: DirectionEnum;
   return_to_date: number;
   symbol: string;
-  strategy: string;
+  strategy: StrategyEnum;
+  period: TimeFrameEnum;
 };
 
 export type RechartsCustomizedProps = {
