@@ -31,10 +31,12 @@ export default function FormInput({ setGraphData }: Props) {
     new Date("2021-01-01")
   );
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toggleColorMode } = useColorMode();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
     const data = await getStrategies(
       symbol,
       strategy,
@@ -66,7 +68,9 @@ export default function FormInput({ setGraphData }: Props) {
     }
 
     setGraphData(newGraphData);
+    setIsLoading(false);
   }
+
   return (
     <form className="form-input" onSubmit={handleSubmit}>
       <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button>
@@ -162,6 +166,8 @@ export default function FormInput({ setGraphData }: Props) {
         aria-label="submit"
         aria-describedby="submit the form"
         colorScheme="teal"
+        isLoading={isLoading}
+        loadingText="Submitting"
       >
         Submit
       </Button>
