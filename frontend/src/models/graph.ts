@@ -7,6 +7,7 @@ export type GraphDataPoint = {
   bot_action: string;
   return_to_date: number;
   symbol: string;
+  strategy: string;
 };
 
 export type RechartsCustomizedProps = {

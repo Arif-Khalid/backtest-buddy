@@ -73,6 +73,11 @@ const customTheme = extendTheme({
         color: "primary",
       },
     },
+    Heading: {
+      baseStyle: {
+        color: "primary",
+      },
+    },
     Tag: {
       variants: {
         [DirectionEnum.BUY]: {

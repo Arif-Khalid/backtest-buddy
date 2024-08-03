@@ -10,7 +10,13 @@ import {
   YAxis,
 } from "recharts";
 import "./App.less";
-import { Box, ChakraProvider, Container, Divider } from "@chakra-ui/react";
+import {
+  Box,
+  ChakraProvider,
+  Container,
+  Divider,
+  Heading,
+} from "@chakra-ui/react";
 import Header from "./components/header/header";
 import FormInput from "./components/form-input/form-input";
 import customTheme from "./theme/theme";
@@ -21,12 +27,20 @@ import CustomizedCandle from "./components/cutomized-candle/customized-candle";
 
 function App() {
   const [graphData, setGraphData] = useState<GraphDataPoint[]>([]);
+  const isGraphPopulated = graphData.length > 0;
   return (
     <ChakraProvider theme={customTheme}>
       <Box bg="background" minHeight="100vh" padding={4}>
         <Container maxW="80%" width="80%" display="flex" flexDirection="column">
           <Header />
           <Divider mb={5} />
+          {isGraphPopulated && (
+            <Heading as="h3" fontSize="md" marginBottom={2}>
+              {graphData[0].strategy} strategy on {graphData[0].symbol} from{" "}
+              {graphData[0].timestamp.toLocaleDateString()} to{" "}
+              {graphData[graphData.length - 1].timestamp.toLocaleDateString()}
+            </Heading>
+          )}
           <ResponsiveContainer width="100%" height={400}>
             <LineChart width={500} height={500} data={graphData}>
               <CartesianGrid />

@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
-import "./FormInput.less";
+import "./form-input.less";
 import { FaCalendar } from "react-icons/fa";
 import { getStrategies } from "../../utils/api/strategies";
 import { GraphDataPoint } from "../../models/graph";
@@ -64,6 +64,7 @@ export default function FormInput({ setGraphData }: Props) {
         return_to_date,
         bot_action: data["bot_actions"][i],
         symbol,
+        strategy,
       });
     }
 
