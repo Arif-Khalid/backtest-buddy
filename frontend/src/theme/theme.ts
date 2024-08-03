@@ -2,7 +2,7 @@
 // #E69812
 
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
-import { DirectionEnum } from "../models/trading_models";
+import { DirectionEnum } from "../models/trading-models";
 
 // #A0CED9
 const config: ThemeConfig = {

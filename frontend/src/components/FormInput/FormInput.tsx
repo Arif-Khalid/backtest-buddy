@@ -13,10 +13,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import "./FormInput.less";
 import { FaCalendar } from "react-icons/fa";
-import { getStrategies } from "../utils/api/strategies";
-import { GraphDataPoint } from "../models/graph";
-import { StrategyEnum, TimeFrameEnum } from "../models/trading_models";
-import { roundToDecimalPlaces } from "../utils/common/helper";
+import { getStrategies } from "../../utils/api/strategies";
+import { GraphDataPoint } from "../../models/graph";
+import { StrategyEnum, TimeFrameEnum } from "../../models/trading-models";
+import { roundToDecimalPlaces } from "../../utils/common/helper";
 
 interface Props {
   setGraphData: (data: GraphDataPoint[]) => void;
