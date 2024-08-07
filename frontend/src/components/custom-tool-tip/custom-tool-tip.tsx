@@ -18,24 +18,22 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import { roundToDecimalPlaces } from "../../utils/common/helper";
+import { useContext } from "react";
+import { GraphContext } from "../../utils/context/graph-context";
 
 export default function CustomToolTip({
   active,
   payload,
 }: TooltipProps<ValueType, NameType>) {
+  const {
+    graphData: { symbol },
+  } = useContext(GraphContext);
+
   if (!active || !payload || !payload.length) {
     return null;
   }
-  const {
-    timestamp,
-    open,
-    close,
-    signal,
-    gain,
-    return_to_date,
-    bot_action,
-    symbol,
-  } = payload[0].payload as GraphDataPoint;
+  const { timestamp, open, close, signal, gain, return_to_date, bot_action } =
+    payload[0].payload as GraphDataPoint;
 
   return (
     <Card>

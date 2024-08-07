@@ -8,6 +8,10 @@ export type GraphDataPoint = {
   gain: number;
   bot_action: DirectionEnum;
   return_to_date: number;
+};
+
+export type GraphData = {
+  dataPoints: GraphDataPoint[];
   symbol: string;
   strategy: StrategyEnum;
   period: TimeFrameEnum;

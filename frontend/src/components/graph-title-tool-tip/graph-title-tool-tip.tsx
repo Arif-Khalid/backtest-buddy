@@ -9,13 +9,13 @@ interface Props {
 export default function GraphTitleToolTip({ strategy, symbol }: Props) {
   return (
     <Container fontSize={"0.7rem"}>
-      <Text color={"tertiary"} margin={1}>
+      <Text color={"inherit"} margin={1}>
         {strategy}: {getEnumExplanation(strategy)}
       </Text>
-      <Text color={"tertiary"} margin={1}>
+      <Text color={"inherit"} margin={1}>
         {symbol}: {getEnumExplanation(symbol)}
       </Text>
-      <Text color={"tertiary"} margin={1}>
+      <Text color={"inherit"} margin={1}>
         Days and times where NYSE were closed are omitted
       </Text>
     </Container>

@@ -1,3 +1,4 @@
+import { GraphData, GraphDataPoint } from "../../models/graph";
 import {
   DirectionEnum,
   StrategyEnum,
@@ -26,7 +27,7 @@ export async function getGraphData(
   amount: number,
   startDate: Date,
   endDate: Date
-) {
+): Promise<GraphData> {
   const data = await strategiesApi.getStrategies(
     symbol,
     strategy,
@@ -36,13 +37,13 @@ export async function getGraphData(
     endDate!
   );
 
-  const newGraphData = [];
+  const newGraphDataPoints: GraphDataPoint[] = [];
   let return_to_date = 0;
   for (let i = 0; i < data["gains"].length; i++) {
     return_to_date = roundToDecimalPlaces(return_to_date + data["gains"][i], 2);
 
     // Can push symbol directly here even though setState might be called before query completes because react does not mutate state, meaning that the symbol will be the same as when the query was made and the new symbol object created by setState will not be used
-    newGraphData.push({
+    newGraphDataPoints.push({
       timestamp: new Date(data["timestamps"][i]),
       open: data["open"][i],
       close: data["close"][i],
@@ -50,11 +51,15 @@ export async function getGraphData(
       gain: data["gains"][i],
       return_to_date,
       bot_action: data["bot_actions"][i] as DirectionEnum,
-      symbol,
-      strategy: strategy as StrategyEnum,
-      period: period as TimeFrameEnum,
     });
   }
+
+  const newGraphData = {
+    dataPoints: newGraphDataPoints,
+    symbol,
+    strategy: strategy as StrategyEnum,
+    period: period as TimeFrameEnum,
+  };
 
   return newGraphData;
 }

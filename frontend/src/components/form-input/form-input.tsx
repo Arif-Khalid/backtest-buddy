@@ -8,23 +8,19 @@ import {
   Text,
   useColorMode,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import "./form-input.less";
 import { FaCalendar } from "react-icons/fa";
-import { GraphDataPoint } from "../../models/graph";
 import {
   StrategyEnum,
   TimeFrameEnum,
 } from "../../models/trading-models";
 import { getGraphData } from "../../utils/common/graph-utils";
+import { GraphContext } from "../../utils/context/graph-context";
 
-interface Props {
-  setGraphData: (data: GraphDataPoint[]) => void;
-}
-
-export default function FormInput({ setGraphData }: Props) {
+export default function FormInput() {
   const [strategy, setStrategy] = useState<string>(StrategyEnum.OBV);
   const [symbol, setSymbol] = useState<string>("AAPL");
   const [period, setPeriod] = useState<string>(TimeFrameEnum.DAY);
@@ -35,7 +31,7 @@ export default function FormInput({ setGraphData }: Props) {
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toggleColorMode } = useColorMode();
-
+  const {setGraphData} = useContext(GraphContext);
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
