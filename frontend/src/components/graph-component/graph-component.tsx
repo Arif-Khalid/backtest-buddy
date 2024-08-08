@@ -1,12 +1,12 @@
-import { Container, Icon } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import { Container } from "@chakra-ui/react";
+import { useContext } from "react";
 import {
   Box,
   Heading,
   IconButton,
   Tooltip as ChakraTooltip,
 } from "@chakra-ui/react";
-import { FaQuestionCircle, FaFileExcel } from "react-icons/fa";
+import { FaFileExcel } from "react-icons/fa";
 import {
   LineChart,
   Line,
@@ -26,6 +26,7 @@ import FormInput from "../form-input/form-input";
 import { GraphContext } from "../../utils/context/graph-context";
 import { exportGraphDataToExcel } from "../../utils/common/excel-utils";
 import GraphTitleToolTip from "../graph-title-tool-tip/graph-title-tool-tip";
+import AdditionalInformation from "../additional-information/additional-information";
 export default function GraphComponent() {
   const { graphData } = useContext(GraphContext);
   const graphDataPoints = graphData.dataPoints;
@@ -49,23 +50,12 @@ export default function GraphComponent() {
                 graphData.dataPoints.length - 1
               ].timestamp.toLocaleDateString()}
             </Heading>
-            <ChakraTooltip
-              label={
-                <GraphTitleToolTip
-                  strategy={graphData.strategy}
-                  symbol={graphData.symbol}
-                />
-              }
-              color="tertiary"
-            >
-              <Box marginTop={-2}>
-                <Icon
-                  as={FaQuestionCircle}
-                  boxSize={3}
-                  color="secondary"
-                ></Icon>
-              </Box>
-            </ChakraTooltip>
+            <AdditionalInformation>
+              <GraphTitleToolTip
+                strategy={graphData.strategy}
+                symbol={graphData.symbol}
+              />
+            </AdditionalInformation>
           </Box>
           <ChakraTooltip label="Export to Excel" color="tertiary">
             <IconButton

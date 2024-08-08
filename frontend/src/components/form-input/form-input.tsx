@@ -13,12 +13,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import "./form-input.less";
 import { FaCalendar } from "react-icons/fa";
-import {
-  StrategyEnum,
-  TimeFrameEnum,
-} from "../../models/trading-models";
+import { StrategyEnum, TimeFrameEnum } from "../../models/trading-models";
 import { getGraphData } from "../../utils/common/graph-utils";
 import { GraphContext } from "../../utils/context/graph-context";
+import AdditionalInformation from "../additional-information/additional-information";
 
 export default function FormInput() {
   const [strategy, setStrategy] = useState<string>(StrategyEnum.OBV);
@@ -31,7 +29,7 @@ export default function FormInput() {
   const [endDate, setEndDate] = useState<Date | null>(new Date("2021-01-10"));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toggleColorMode } = useColorMode();
-  const {setGraphData} = useContext(GraphContext);
+  const { setGraphData } = useContext(GraphContext);
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -54,7 +52,10 @@ export default function FormInput() {
       <Button onClick={() => toggleColorMode()}>Toggle Color Mode</Button>
       <div className="form-input-row">
         <FormControl>
-          <FormLabel>Symbol</FormLabel>
+          <FormLabel>
+            Symbol
+            <AdditionalInformation>Test</AdditionalInformation>
+          </FormLabel>
           <Select
             placeholder="Select symbol"
             value={symbol}
@@ -67,7 +68,10 @@ export default function FormInput() {
           </Select>
         </FormControl>
         <FormControl>
-          <FormLabel>Strategy</FormLabel>
+          <FormLabel>
+            Strategy
+            <AdditionalInformation>Test</AdditionalInformation>
+          </FormLabel>
           <Select
             placeholder="Select strategy"
             value={strategy}
@@ -85,7 +89,10 @@ export default function FormInput() {
       </div>
       <div className="form-input-row">
         <FormControl>
-          <FormLabel>Period</FormLabel>
+          <FormLabel>
+            Period
+            <AdditionalInformation>Test</AdditionalInformation>
+          </FormLabel>
           <Select
             placeholder="Select period"
             value={period}
@@ -101,7 +108,10 @@ export default function FormInput() {
           </Select>
         </FormControl>
         <FormControl>
-          <FormLabel>Trade Amount in USD</FormLabel>
+          <FormLabel>
+            Trade Amount in USD
+            <AdditionalInformation>Test</AdditionalInformation>
+          </FormLabel>
           <Input
             type="number"
             value={amount}
@@ -116,6 +126,7 @@ export default function FormInput() {
             className="date-picker-label"
           >
             Date Range <Icon color="secondary" as={FaCalendar}></Icon>
+            <AdditionalInformation>Test</AdditionalInformation>
           </FormLabel>
           <div className="date-picker-container">
             <DatePicker
