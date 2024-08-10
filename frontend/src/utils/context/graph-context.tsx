@@ -2,6 +2,8 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { GraphData } from "../../models/graph";
 import { StrategyEnum, TimeFrameEnum } from "../../models/trading-models";
 import { getGraphData } from "../common/graph-utils";
+import { useToast } from "@chakra-ui/react";
+import { FEEDBACK_MESSAGES } from "../../constants/feedback-messages";
 
 type GraphContextType = {
   graphData: GraphData;
@@ -29,6 +31,7 @@ export function GraphContextProvider({ children }: Props) {
     strategy: StrategyEnum.OBV,
     period: TimeFrameEnum.DAY,
   });
+  const toast = useToast();
 
   useEffect(() => {
     async function getInitialGraphData() {
@@ -43,8 +46,26 @@ export function GraphContextProvider({ children }: Props) {
       setGraphData(initialGraphData);
     }
 
-    getInitialGraphData();
-  }, []);
+    toast.promise(getInitialGraphData(), {
+      success: {
+        title: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_SUCCESS_TITLE,
+        description: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_SUCCESS_DESC,
+        duration: 3000,
+        isClosable: true,
+      },
+      loading: {
+        title: FEEDBACK_MESSAGES.INITIAL_GRAPH_DATA_LOADING_TITLE,
+        description: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_DESC,
+        isClosable: true,
+      },
+      error: {
+        title: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_ERROR_TITLE,
+        description: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_ERROR_DESC,
+        duration: 3000,
+        isClosable: true,
+      },
+    });
+  }, [toast]);
 
   return (
     <GraphContext.Provider value={{ graphData, setGraphData }}>

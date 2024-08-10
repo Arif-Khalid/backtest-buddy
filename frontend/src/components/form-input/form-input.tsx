@@ -7,6 +7,7 @@ import {
   Select,
   Text,
   useColorMode,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,6 +20,7 @@ import { GraphContext } from "../../utils/context/graph-context";
 import AdditionalInformation from "../additional-information/additional-information";
 import FormattedToolTip from "../formatted-tool-tip/formatted-tool-tip";
 import { TERM_EXPLANATIONS } from "../../constants/explanations";
+import { FEEDBACK_MESSAGES } from "../../constants/feedback-messages";
 
 export default function FormInput() {
   const [strategy, setStrategy] = useState<string>(StrategyEnum.OBV);
@@ -32,21 +34,39 @@ export default function FormInput() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toggleColorMode } = useColorMode();
   const { setGraphData } = useContext(GraphContext);
+  const toast = useToast();
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
 
-    const newGraphData = await getGraphData(
-      symbol,
-      strategy,
-      period,
-      amount,
-      startDate!,
-      endDate!
-    );
-
-    setGraphData(newGraphData);
-    setIsLoading(false);
+    try {
+      const newGraphData = await getGraphData(
+        symbol,
+        strategy,
+        period,
+        amount,
+        startDate!,
+        endDate!
+      );
+      setGraphData(newGraphData);
+      toast({
+        title: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_SUCCESS_TITLE,
+        description: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_SUCCESS_DESC,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (e) {
+      toast({
+        title: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_ERROR_TITLE,
+        description: FEEDBACK_MESSAGES.GRAPH_DATA_LOADING_ERROR_DESC,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
