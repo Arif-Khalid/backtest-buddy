@@ -25,8 +25,12 @@ import CustomizedCandle from "../customized-candle/customized-candle";
 import FormInput from "../form-input/form-input";
 import { GraphContext } from "../../utils/context/graph-context";
 import { exportGraphDataToExcel } from "../../utils/common/excel-utils";
-import GraphTitleToolTip from "../graph-title-tool-tip/graph-title-tool-tip";
+import FormattedToolTip from "../formatted-tool-tip/formatted-tool-tip";
 import AdditionalInformation from "../additional-information/additional-information";
+import {
+  DATE_RANGE_INFORMATION,
+  TERM_EXPLANATIONS,
+} from "../../constants/explanations";
 export default function GraphComponent() {
   const { graphData } = useContext(GraphContext);
   const graphDataPoints = graphData.dataPoints;
@@ -51,9 +55,20 @@ export default function GraphComponent() {
               ].timestamp.toLocaleDateString()}
             </Heading>
             <AdditionalInformation>
-              <GraphTitleToolTip
-                strategy={graphData.strategy}
-                symbol={graphData.symbol}
+              <FormattedToolTip
+                contents={[
+                  {
+                    title: "Strategy",
+                    explanation: TERM_EXPLANATIONS[graphData.strategy],
+                  },
+                  {
+                    title: "Symbol",
+                    explanation: TERM_EXPLANATIONS[graphData.symbol],
+                  },
+                  {
+                    explanation: DATE_RANGE_INFORMATION,
+                  },
+                ]}
               />
             </AdditionalInformation>
           </Box>

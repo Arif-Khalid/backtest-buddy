@@ -7,19 +7,6 @@ import {
 import { strategiesApi } from "../api/strategies";
 import { roundToDecimalPlaces } from "./helper";
 
-export function getEnumExplanation(
-  enumToExplain: StrategyEnum | string
-): string {
-  switch (enumToExplain) {
-    case StrategyEnum.OBV:
-      return "On-balance volume (OBV) is a technical trading momentum indicator that uses volume flow to predict changes in stock price.";
-    case "AAPL":
-      return "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide.";
-    default:
-      return "No explanation available";
-  }
-}
-
 export async function getGraphData(
   symbol: string,
   strategy: string,

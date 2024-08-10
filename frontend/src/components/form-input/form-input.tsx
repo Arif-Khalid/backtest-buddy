@@ -17,6 +17,8 @@ import { StrategyEnum, TimeFrameEnum } from "../../models/trading-models";
 import { getGraphData } from "../../utils/common/graph-utils";
 import { GraphContext } from "../../utils/context/graph-context";
 import AdditionalInformation from "../additional-information/additional-information";
+import FormattedToolTip from "../formatted-tool-tip/formatted-tool-tip";
+import { TERM_EXPLANATIONS } from "../../constants/explanations";
 
 export default function FormInput() {
   const [strategy, setStrategy] = useState<string>(StrategyEnum.OBV);
@@ -54,7 +56,14 @@ export default function FormInput() {
         <FormControl>
           <FormLabel>
             Symbol
-            <AdditionalInformation>Test</AdditionalInformation>
+            <AdditionalInformation>
+              <FormattedToolTip
+                contents={[
+                  { explanation: TERM_EXPLANATIONS.SYMBOL },
+                  { title: symbol, explanation: TERM_EXPLANATIONS[symbol] },
+                ]}
+              />
+            </AdditionalInformation>
           </FormLabel>
           <Select
             placeholder="Select symbol"
@@ -70,7 +79,14 @@ export default function FormInput() {
         <FormControl>
           <FormLabel>
             Strategy
-            <AdditionalInformation>Test</AdditionalInformation>
+            <AdditionalInformation>
+              <FormattedToolTip
+                contents={[
+                  { explanation: TERM_EXPLANATIONS.STRATEGY },
+                  { title: strategy, explanation: TERM_EXPLANATIONS[strategy] },
+                ]}
+              />
+            </AdditionalInformation>
           </FormLabel>
           <Select
             placeholder="Select strategy"
@@ -91,7 +107,11 @@ export default function FormInput() {
         <FormControl>
           <FormLabel>
             Period
-            <AdditionalInformation>Test</AdditionalInformation>
+            <AdditionalInformation>
+              <FormattedToolTip
+                contents={[{ explanation: TERM_EXPLANATIONS.PERIOD }]}
+              />
+            </AdditionalInformation>
           </FormLabel>
           <Select
             placeholder="Select period"
@@ -110,7 +130,11 @@ export default function FormInput() {
         <FormControl>
           <FormLabel>
             Trade Amount in USD
-            <AdditionalInformation>Test</AdditionalInformation>
+            <AdditionalInformation>
+              <FormattedToolTip
+                contents={[{ explanation: TERM_EXPLANATIONS.TRADE_AMOUNT }]}
+              />
+            </AdditionalInformation>
           </FormLabel>
           <Input
             type="number"
@@ -126,7 +150,12 @@ export default function FormInput() {
             className="date-picker-label"
           >
             Date Range <Icon color="secondary" as={FaCalendar}></Icon>
-            <AdditionalInformation>Test</AdditionalInformation>
+            <AdditionalInformation>
+              {" "}
+              <FormattedToolTip
+                contents={[{ explanation: TERM_EXPLANATIONS.DATE_RANGE }]}
+              />
+            </AdditionalInformation>
           </FormLabel>
           <div className="date-picker-container">
             <DatePicker
